@@ -312,7 +312,8 @@ Masuk ke direktori yang baru saja dibuat agar semua perintah berikutnya dijalank
 
 # Membuat File Laporan Awal
 ```
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ echo "=== LAPORAN FILE SISTEM ===" > report.txt
+rahmat@Rahmat2:~$ echo " LAPORAN STATISTIK SISTEM FILE" >> report.txt
+rahmat@Rahmat2:~$ echo "==================================" >> report.txt
 ```
 🧠Penjelasan:
 Membuat file report.txt dan menuliskan judul laporan di dalamnya.
@@ -323,8 +324,8 @@ Simbol > digunakan untuk menulis baru (overwrite) ke dalam file.
 
 # Menambahkan Informasi Jumlah File
 ```
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ echo "Jumlah file:" >> report.txt
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ find . -type f | wc -l >> report.txt
+rahmat@Rahmat2:~$ echo "Jumlah File dan DIrektori:" >> report.txt
+rahmat@Rahmat2:~$ ls | wc -l >> report.txt
 ```
 🧠Penjelasan:
 
@@ -337,27 +338,11 @@ Simbol >> digunakan untuk menambahkan hasil ke dalam report.txt (append mode).
 
 
 ---
-# Menambahkan Informasi Jumlah Folder
-```
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ echo "Jumlah folder:" >> report.txt
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ find . -type d | wc -l >> report.txt
-```
-🧠Penjelasan:
-
-find . -type d mencari semua direktori.
-
-wc -l menghitung jumlah baris (jumlah direktori yang ditemukan).
-
-Hasilnya ditambahkan ke laporan.
-
-
-
----
 
 # Menambahkan Informasi Ukuran Total Direktori
 ```
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ echo "Ukuran total direktori:" >> report.txt
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ du -sh >> report.txt
+rahmat@Rahmat2:~$ echo "Ukuran Total Direktori:" >> report.txt
+rahmat@Rahmat2:~$ du -sh >> report.txt
 ```
 🧠Penjelasan:
 
@@ -370,16 +355,34 @@ Hasilnya ditambahkan ke dalam report.txt.
 ---
 # Menambahkan Daftar Semua File
 ```
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ echo "Daftar file:" >> report.txt
-rahmat@Rahmat2:~/Latihan1_sistemOperasi$ ls -lRh >> report.txt
+rahmat@Rahmat2:~$ find /home -type f -exec du -ah {} + | sort -hr | head -n 10 >> report.txt
 ```
 🧠Penjelasan:
+find /home -type f
+Mencari semua file biasa (bukan folder) yang ada di direktori /home dan seluruh subdirektorinya.
 
-ls -lRh menampilkan daftar file dan folder secara rinci (-l), rekursif (-R), dan ukuran manusiawi (-h).
+-exec du -ah {} +
+Untuk setiap file yang ditemukan oleh find, jalankan perintah du -ah:
+
+du = disk usage → menghitung ukuran file atau direktori.
+-a = tampilkan ukuran untuk semua file (bukan hanya folder).
+-h = tampilkan ukuran dalam format “human readable” (contoh: 1K, 2M, 3G).
+{} adalah placeholder untuk file yang ditemukan oleh find.
++ berarti jalankan du sekaligus untuk banyak file agar lebih efisien (tidak satu per satu).
+
+| sort -hr
+Hasil output dari du disortir (diurutkan):
+-h = berdasarkan ukuran yang bisa dibaca manusia.
+-r = urut terbalik, jadi yang terbesar muncul di atas.
+
+| head -n 10
+Hanya menampilkan 10 file terbesar dari hasil sortir tadi.
+
+>> report.txt
+Hasil akhirnya ditambahkan (append) ke file report.txt tanpa menghapus isi sebelumnya.
+
 
 Output daftar file ini kemudian ditambahkan ke report.txt.
-
-
 
 ---
 
@@ -387,16 +390,28 @@ Output daftar file ini kemudian ditambahkan ke report.txt.
 
 Setelah semua langkah dijalankan, kamu akan mendapatkan file bernama report.txt yang berisi informasi seperti berikut:
 
-=== LAPORAN FILE SISTEM ===
-Jumlah file:
-5
-Jumlah folder:
-3
-Ukuran total direktori:
-20K
-Daftar file:
-(total 12K)
--rw-rw-r-- 1 vboxuser vboxuser  120 Nov 11 08:05 report.txt
+ LAPORAN STATISTIK SISTEM FILE
+==================================
+Tanggal: Wed Nov 12 03:55:48 PM UTC 2025
+ 
+Jumlah File dan DIrektori:
+15
+ 
+Ukuran Total Direktori:
+138M	.
+ 
+10 File Terbesar:
+14M	/home/rahmat/snap/firefox/common/.mozilla/firefox/zka2w5ep.default/storage/permanent/chrome/idb/3870112724rsegmnoittet-es.sqlite
+11M	/home/rahmat/snap/firefox/common/.cache/mozilla/firefox/zka2w5ep.default/startupCache/scriptCache.bin
+9.2M	/home/rahmat/snap/firefox/common/.cache/mozilla/firefox/zka2w5ep.default/startupCache/startupCache.8.little
+8.6M	/home/rahmat/snap/firefox/common/.cache/mozilla/firefox/zka2w5ep.default/safebrowsing/google4/goog-phish-proto.vlpset
+5.0M	/home/rahmat/snap/firefox/common/.mozilla/firefox/zka2w5ep.default/security_state/crlite.filter
+5.0M	/home/rahmat/snap/firefox/common/.mozilla/firefox/zka2w5ep.default/places.sqlite
+5.0M	/home/rahmat/snap/firefox/common/.mozilla/firefox/zka2w5ep.default/favicons.sqlite
+5.0M	/home/rahmat/snap/firefox/common/.cache/mozilla/firefox/zka2w5ep.default/cache2/entries/7ED5807BBF373A2B5E79B1FD67390D3C34A8193E
+4.1M	/home/rahmat/.cache/tracker3/files/http%3A%2F%2Ftracker.api.gnome.org%2Fontology%2Fv3%2Ftracker%23FileSystem.db-wal
+4.0M	/home/rahmat/.cache/tracker3/files/meta.db-wal
+===================================
 
 DEKRIPSI GAMBAR
 (https://drive.google.com/file/d/1r-g3qWzZp21oOSopnosv_kRXnqb8gWhH/view?usp=drive_link)
